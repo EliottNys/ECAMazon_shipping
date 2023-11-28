@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcel Information</title>
+</head>
+<body>
+    <h1>Parcel Information</h1>
+    {% if parcel_info %}
+        <table border="1">
+            <tr>
+                <th>Parcel ID</th>
+                <th>Order ID</th>
+                <th>User ID</th>
+                <th>Address</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td>{{ parcel_info.parcel_id }}</td>
+                <td>{{ parcel_info.order_id }}</td>
+                <td>{{ parcel_info.user_id }}</td>
+                <td>{{ parcel_info.address }}</td>
+                <td>{{ parcel_info.status }}</td>
+            </tr>
+        </table>
+    {% else %}
+        <p>Parcel not found.</p>
+    {% endif %}
+</body>
+</html>

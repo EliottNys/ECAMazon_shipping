@@ -38,6 +38,15 @@ def all_parcels():
         return str(e), 500
     return render_template('all_parcels.html', parcel_data=parcel_data)
 
+@app.route('/parcel/<string:parcel_id>', methods=['GET'])
+def get_parcel_info(parcel_id):
+    parcel_info = mongo.db.parcels.find_one({'parcel_id': parcel_id})
+
+    if parcel_info:
+        return render_template('parcel.html', parcel_info=parcel_info)
+    else:
+        return jsonify({'error': 'Parcel not found'}), 404
+
 # Function to send parcel_id and address to Dispatching microservice
 def send_to_dispatching(parcel_id, address):
     # =============================
