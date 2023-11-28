@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping Microservice Web Interface</title>
+</head>
+<body>
+    <h1>Parcel Information</h1>
+    <table border="1">
+        <tr>
+            <th>Parcel ID</th>
+            <th>Order ID</th>
+            <th>User ID</th>
+            <th>Address</th>
+            <th>Status</th>
+        </tr>
+        {% for parcel in parcel_data %}
+            <tr>
+                <td>{{ parcel.parcel_id }}</td>
+                <td>{{ parcel.order_id }}</td>
+                <td>{{ parcel.user_id }}</td>
+                <td>{{ parcel.address }}</td>
+                <td>{{ parcel.status }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
