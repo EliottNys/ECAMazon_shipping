@@ -1,0 +1,7 @@
+Flask
+flask_pymongo
+pymongo
+pytest
+json
+unittest
+mongomock
