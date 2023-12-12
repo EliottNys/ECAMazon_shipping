@@ -1,52 +1,54 @@
-# test_app.py
-import pytest
+import json
+import unittest
+import mongomock
 from app import app, mongo
 from unittest.mock import patch
 
-@pytest.fixture
-def client():
-    app.config['TESTING'] = True
-    with app.test_client() as test_client:
-        with app.app_context():
-            # Vous pouvez ajouter ici une initialisation de la base de données si nécessaire
-            pass
-        yield test_client
+class FlaskTestCase(unittest.TestCase):
 
-@patch('app.get_user_address')
-@patch('app.send_to_dispatching')
-def test_new_parcel(mock_send_to_dispatching, mock_get_user_address, client):
-    # Simuler une réponse pour get_user_address
-    mock_get_user_address.return_value = 'Test Address'
+    def setUp(self):
+        self.app = app.test_client()
+        self.app.testing = True
+        self.mock_db = mongomock.MongoClient().db
 
-    # Données pour la requête POST
-    parcel_data = {'order_id': '123', 'user_id': '456', 'parcel_id': '789'}
+    def tearDown(self):
+        pass
 
-    # Envoyer la requête POST
-    response = client.post('/new_parcel', json=parcel_data)
+    @mongomock.patch(servers=(('localhost', 27017),))
+    @patch('app.get_user_address', return_value='Some Address')
+    @patch('app.send_to_dispatching')
+    def test_new_parcel(self, mock_send_to_dispatching, mock_get_user_address):
+        mongo.db = self.mock_db
+        response = self.app.post('/new_parcel', data=json.dumps({
+            'order_id': '123',
+            'user_id': '456',
+            'parcel_id': '789'
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        mock_get_user_address.assert_called_once_with('456')
+        mock_send_to_dispatching.assert_called_once_with('789', 'Some Address')
 
-    # Vérifier le code de statut de la réponse
-    assert response.status_code == 200
-    assert b'Parcel information received successfully' in response.data
+    @mongomock.patch(servers=(('localhost', 27017),))
+    def test_all_parcels(self):
+        mongo.db = self.mock_db
+        response = self.app.get('/all_parcels')
+        self.assertEqual(response.status_code, 200)
 
-    # Vérifier que send_to_dispatching a été appelé
-    mock_send_to_dispatching.assert_called_with('789', 'Test Address')
+    @mongomock.patch(servers=(('localhost', 27017),))
+    def test_get_parcel_info(self):
+        mongo.db = self.mock_db
+        mongo.db.parcels.insert_one({'parcel_id': '123', 'order_id': '123', 'user_id': '456', 'address': 'Some Address', 'status': 'Processing'})
+        response = self.app.get('/parcel/123')
+        self.assertEqual(response.status_code, 200)
 
-def test_all_parcels(client):
-    # Envoyer une requête GET à la route /all_parcels
-    response = client.get('/all_parcels')
+    @mongomock.patch(servers=(('localhost', 27017),))
+    def test_new_parcel_missing_data(self):
+        mongo.db = self.mock_db
+        response = self.app.post('/new_parcel', data=json.dumps({
+            'order_id': '123',
+            'user_id': '456'
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 400)
 
-    # Vérifier le code de statut de la réponse
-    assert response.status_code == 200
-    # Ajoutez des assertions supplémentaires basées sur le contenu de votre template 'all_parcels.html'
-
-@patch('app.mongo.db.parcels.find_one')
-def test_get_parcel_info(mock_find_one, client):
-    # Configurer le mock pour simuler une réponse de la base de données
-    mock_find_one.return_value = {'parcel_id': '123', 'order_id': '456', 'user_id': '789', 'address': 'Test Address', 'status': 'Processing'}
-
-    # Envoyer une requête GET
-    response = client.get('/parcel/123')
-
-    # Vérifier le code de statut de la réponse
-    assert response.status_code == 200
-    # Ajoutez des assertions supplémentaires basées sur le contenu de votre template 'parcel.html'
+if __name__ == '__main__':
+    unittest.main()
