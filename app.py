@@ -8,10 +8,12 @@ app = Flask(__name__)
 app.config['MONGO_URI'] = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/shipping_db')
 mongo = PyMongo(app)
 
+# Parcel search by parcel ID
 @app.route('/')
 def search():
     return render_template('search.html')
 
+# Add a new parcel (for STOCK microservice)
 @app.route('/new_parcel', methods=['POST'])
 def new_parcel():
     data = request.json
@@ -36,6 +38,7 @@ def new_parcel():
 
     return jsonify({'message': 'Parcel information received successfully'})
 
+# Display all parcels
 @app.route('/all_parcels')
 def all_parcels():
     try:
@@ -44,6 +47,7 @@ def all_parcels():
         return str(e), 500
     return render_template('all_parcels.html', parcel_data=parcel_data)
 
+# Display parcel associated with parcel ID
 @app.route('/parcel/<string:parcel_id>', methods=['GET'])
 def get_parcel_info(parcel_id):
     parcel_info = mongo.db.parcels.find_one({'parcel_id': parcel_id})
@@ -52,7 +56,8 @@ def get_parcel_info(parcel_id):
         return render_template('parcel.html', parcel_info=parcel_info)
     else:
         return jsonify({'error': 'Parcel not found'}), 404
-    
+
+# Update the status of a parcel (for DISPATCHING microservice)    
 @app.route('/update_status', methods=['POST'])
 def update_status():
     data = request.json
@@ -70,16 +75,16 @@ def update_status():
     else:
         return jsonify({'error': 'Parcel not found'}), 404
     
-# Function to send parcel_id and address to Dispatching microservice
+# Send relevant parcel information to DISPATCHING microservice
 def send_to_dispatching(parcel_id, address):
     # =============================
     # call DISPATCHING microservice
     # POST parcel_id and address
     # =============================
     # requests.post("/colis", json= {"parcel_id": parcel_id, "user_address": address})
-    
     pass
 
+# Get user address based on user ID from USERS microservice
 def get_user_address(user_id):
     # =============================
     # call USERS microservice
