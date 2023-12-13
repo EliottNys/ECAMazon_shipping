@@ -2,6 +2,8 @@
 
 This microservice manages sent and returned parcels and their complete traceability.
 
+[DockerHub repository](https://hub.docker.com/r/nislhin/ecamazon_shipping)
+
 ## API Endpoints
 
 ### Search Parcel by Parcel ID
