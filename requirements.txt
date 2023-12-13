@@ -3,3 +3,4 @@ flask_pymongo
 pymongo
 pytest
 mongomock
+requests
