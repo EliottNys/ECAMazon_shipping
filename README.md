@@ -6,9 +6,9 @@ This microservice manages sent and returned parcels and their complete traceabil
 
 ## API Endpoints
 
-### Search Parcel by Parcel ID
+### Search Parcel by ID
 
-Search a parcel by Parcel ID.
+Search a parcel by Parcel, Order or User ID.
 
 - **URL**: `/`
 - **Method**: `GET`
@@ -60,6 +60,12 @@ Retrieve information about all parcels.
   - `page` (integer, optional): The page number for pagination (default is 1).
 - **Response**:
   - **Success (200 OK)**: HTML page
+  - **Error (404 Not Found)**:
+    ```json
+    {
+        "error": "User not found"
+    }
+    ```
   - **Error (500 Internal Server Error)**:
     ```json
     {
@@ -78,6 +84,12 @@ Retrieve information about all parcels.
   - `page` (integer, optional): The page number for pagination (default is 1).
 - **Response**:
   - **Success (200 OK)**: HTML page
+  - **Error (404 Not Found)**:
+    ```json
+    {
+        "error": "Order not found"
+    }
+    ```
   - **Error (500 Internal Server Error)**:
     ```json
     {

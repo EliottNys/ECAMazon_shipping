@@ -6,11 +6,17 @@
     <script>
         function redirectToParcel() {
             var parcelId = document.getElementById('parcel-id').value;
+            var orderId = document.getElementById('order-id').value;
+            var userId = document.getElementById('user-id').value;
+
             if (parcelId) {
-                // Ici, vous pourriez ajouter une logique pour vérifier si le parcel_id existe
                 window.location.href = '/parcel/' + parcelId;
+            } else if (orderId) {
+                window.location.href = '/order/' + orderId;
+            } else if (userId) {
+                window.location.href = '/user/' + userId;
             } else {
-                alert('Please enter a valid Parcel ID.');
+                alert('Please enter a valid ID in any field.');
             }
             return false; // Pour éviter le rechargement de la page par le formulaire
         }
@@ -20,8 +26,18 @@
     <h1>Search for a Parcel</h1>
     <form onsubmit="return redirectToParcel()">
         <label for="parcel-id">Parcel ID:</label>
-        <input type="text" id="parcel-id" name="parcel_id" required>
+        <input type="text" id="parcel-id" name="parcel_id">
+        <br>
+        <label for="order-id">Order ID:</label>
+        <input type="text" id="order-id" name="order_id">
+        <br>
+        <label for="user-id">User ID:</label>
+        <input type="text" id="user-id" name="user_id">
+        <br>
         <input type="submit" value="Search">
     </form>
+    <p>
+        <a href="/all_parcels">View All Parcels</a>
+    </p>
 </body>
 </html>

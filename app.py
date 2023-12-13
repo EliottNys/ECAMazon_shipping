@@ -69,8 +69,11 @@ def user_parcels(user_id):
 
     except Exception as e:
         return str(e), 500
-
-    return render_template('user_parcels.html', parcel_data=user_parcel_data, page=page, total_pages=total_user_pages, user_id=user_id)
+    
+    if total_user_parcels > 0:
+        return render_template('user_parcels.html', parcel_data=user_parcel_data, page=page, total_pages=total_user_pages, user_id=user_id)
+    else:
+        return jsonify({'error': 'User not found'}), 404
 
 @app.route('/order/<int:order_id>')
 def order_parcels(order_id):
@@ -87,10 +90,13 @@ def order_parcels(order_id):
     except Exception as e:
         return str(e), 500
 
-    return render_template('order_parcels.html', parcel_data=order_parcel_data, page=page, total_pages=total_order_pages, order_id=order_id)
+    if total_order_parcels > 0:
+        return render_template('order_parcels.html', parcel_data=order_parcel_data, page=page, total_pages=total_order_pages, order_id=order_id)
+    else:
+        return jsonify({'error': 'Order not found'}), 404
 
 # Display parcel associated with parcel ID
-@app.route('/parcel/<string:parcel_id>', methods=['GET'])
+@app.route('/parcel/<int:parcel_id>', methods=['GET'])
 def get_parcel_info(parcel_id):
     parcel_info = mongo.db.parcels.find_one({'parcel_id': parcel_id})
 
