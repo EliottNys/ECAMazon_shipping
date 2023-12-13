@@ -42,10 +42,17 @@ def new_parcel():
 @app.route('/all_parcels')
 def all_parcels():
     try:
-        parcel_data = mongo.db.parcels.find()
+        page_size = 10
+        page = int(request.args.get('page', 1))
+        skip = (page - 1) * page_size
+
+        parcel_data = mongo.db.parcels.find().skip(skip).limit(page_size)
+
+        total_parcels = mongo.db.parcels.count_documents({})
+        total_pages = (total_parcels + page_size - 1) // page_size
     except Exception as e:
         return str(e), 500
-    return render_template('all_parcels.html', parcel_data=parcel_data)
+    return render_template('all_parcels.html', parcel_data=parcel_data, page=page, total_pages=total_pages)
 
 # Display parcel associated with parcel ID
 @app.route('/parcel/<string:parcel_id>', methods=['GET'])
