@@ -53,6 +53,23 @@ def get_parcel_info(parcel_id):
     else:
         return jsonify({'error': 'Parcel not found'}), 404
     
+@app.route('/update_status', methods=['POST'])
+def update_status():
+    data = request.json
+    try:
+        parcel_id = data['parcel_id']
+        new_status = data['status']
+    except KeyError:
+        return jsonify({'error': 'Missing data'}), 400
+
+    # update status in the database
+    result = mongo.db.parcels.update_one({'parcel_id': parcel_id}, {'$set': {'status': new_status}})
+
+    if result.modified_count > 0:
+        return jsonify({'message': 'Parcel status updated successfully'})
+    else:
+        return jsonify({'error': 'Parcel not found'}), 404
+    
 # Function to send parcel_id and address to Dispatching microservice
 def send_to_dispatching(parcel_id, address):
     # =============================
