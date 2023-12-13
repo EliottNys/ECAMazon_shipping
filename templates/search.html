@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Parcel Search</title>
+    <script>
+        function redirectToParcel() {
+            var parcelId = document.getElementById('parcel-id').value;
+            if (parcelId) {
+                // Ici, vous pourriez ajouter une logique pour vérifier si le parcel_id existe
+                window.location.href = '/parcel/' + parcelId;
+            } else {
+                alert('Please enter a valid Parcel ID.');
+            }
+            return false; // Pour éviter le rechargement de la page par le formulaire
+        }
+    </script>
+</head>
+<body>
+    <h1>Search for a Parcel</h1>
+    <form onsubmit="return redirectToParcel()">
+        <label for="parcel-id">Parcel ID:</label>
+        <input type="text" id="parcel-id" name="parcel_id" required>
+        <input type="submit" value="Search">
+    </form>
+</body>
+</html>

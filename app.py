@@ -2,10 +2,15 @@ from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 from flask import render_template
 import os
+import requests
 
 app = Flask(__name__)
 app.config['MONGO_URI'] = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/shipping_db')
 mongo = PyMongo(app)
+
+@app.route('/')
+def search():
+    return render_template('search.html')
 
 @app.route('/new_parcel', methods=['POST'])
 def new_parcel():
@@ -47,13 +52,15 @@ def get_parcel_info(parcel_id):
         return render_template('parcel.html', parcel_info=parcel_info)
     else:
         return jsonify({'error': 'Parcel not found'}), 404
-
+    
 # Function to send parcel_id and address to Dispatching microservice
 def send_to_dispatching(parcel_id, address):
     # =============================
     # call DISPATCHING microservice
     # POST parcel_id and address
     # =============================
+    # requests.post("/colis", json= {"parcel_id": parcel_id, "user_address": address})
+    
     pass
 
 def get_user_address(user_id):
@@ -61,6 +68,7 @@ def get_user_address(user_id):
     # call USERS microservice
     # GET address from user_id
     # =============================
+    # response = requests.get("/users/" + user_id)
     return 'Unknown'
 
 if __name__ == '__main__':
