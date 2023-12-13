@@ -4,6 +4,12 @@ This microservice manages sent and returned parcels and their complete traceabil
 
 [DockerHub repository](https://hub.docker.com/r/nislhin/ecamazon_shipping)
 
+To test locally, use the following commands:
+```bash
+docker-compose build
+docker-compose up
+```
+
 ## API Endpoints
 
 ### Search Parcel by ID
