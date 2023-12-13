@@ -50,9 +50,44 @@ def all_parcels():
 
         total_parcels = mongo.db.parcels.count_documents({})
         total_pages = (total_parcels + page_size - 1) // page_size
+
     except Exception as e:
         return str(e), 500
     return render_template('all_parcels.html', parcel_data=parcel_data, page=page, total_pages=total_pages)
+
+@app.route('/user/<int:user_id>')
+def user_parcels(user_id):
+    try:
+        page_size = 10
+        page = int(request.args.get('page', 1))
+        skip = (page - 1) * page_size
+
+        user_parcel_data = mongo.db.parcels.find({'user_id': user_id}).skip(skip).limit(page_size)
+
+        total_user_parcels = mongo.db.parcels.count_documents({'user_id': user_id})
+        total_user_pages = (total_user_parcels + page_size - 1) // page_size
+
+    except Exception as e:
+        return str(e), 500
+
+    return render_template('user_parcels.html', parcel_data=user_parcel_data, page=page, total_pages=total_user_pages, user_id=user_id)
+
+@app.route('/order/<int:order_id>')
+def order_parcels(order_id):
+    try:
+        page_size = 10
+        page = int(request.args.get('page', 1))
+        skip = (page - 1) * page_size
+
+        order_parcel_data = mongo.db.parcels.find({'order_id': order_id}).skip(skip).limit(page_size)
+
+        total_order_parcels = mongo.db.parcels.count_documents({'order_id': order_id})
+        total_order_pages = (total_order_parcels + page_size - 1) // page_size
+
+    except Exception as e:
+        return str(e), 500
+
+    return render_template('order_parcels.html', parcel_data=order_parcel_data, page=page, total_pages=total_order_pages, order_id=order_id)
 
 # Display parcel associated with parcel ID
 @app.route('/parcel/<string:parcel_id>', methods=['GET'])

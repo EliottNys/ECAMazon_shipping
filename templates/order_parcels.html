@@ -28,13 +28,13 @@
     <div>
         <!-- Pagination controls -->
         {% if page > 1 %}
-            <a href="/all_parcels?page={{ page - 1 }}">Previous</a>
+            <a href="/order/{{user_id}}?page={{ page - 1 }}">Previous</a>
         {% endif %}
         
         Page {{ page }}
         
         {% if page < total_pages %}
-            <a href="/all_parcels?page={{ page + 1 }}">Next</a>
+            <a href="/order/{{user_id}}?page={{ page + 1 }}">Next</a>
         {% endif %}
     </div>
 </body>
