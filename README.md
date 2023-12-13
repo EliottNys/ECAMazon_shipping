@@ -38,6 +38,8 @@ Retrieve information about all parcels.
 
 - **URL**: `/all_parcels`
 - **Method**: `GET`
+- **Parameters**:
+  - `page` (integer, optional): The page number for pagination (default is 1).
 - **Response**:
   - **Success (200 OK)**: html page
   - **Error (500 Internal Server Error)**:
