@@ -29,7 +29,7 @@ spec:
         - name: flask-app
           image: nislhin/ecamazon_shipping:latest
           ports:
-            - containerPort: 30010
+            - containerPort: 5000
           env:
             - name: MONGO_URI
               value: "mongodb://mongo-service:27017/shipping_db"
@@ -52,7 +52,7 @@ spec:
         - name: mongo
           image: mongo
           ports:
-            - containerPort: 30011
+            - containerPort: 27017
           volumeMounts:
             - name: mongo-persistent-storage
               mountPath: /data/db
