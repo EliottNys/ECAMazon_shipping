@@ -14,7 +14,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ecamazon-shipping-app
+  name: shipping-flask-api
 spec:
   replicas: 2
   selector:
@@ -37,7 +37,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongo-deployment
+  name: shipping-mongodb
 spec:
   replicas: 1
   selector:
