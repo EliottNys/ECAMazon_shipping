@@ -14,7 +14,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ecamazon-shipping_app
+  name: ecamazon-shipping-app
 spec:
   replicas: 2
   selector:
