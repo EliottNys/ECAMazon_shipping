@@ -5,7 +5,7 @@ import os
 import requests
 
 app = Flask(__name__)
-app.config['MONGO_URI'] = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/shipping_db')
+app.config['MONGO_URI'] = os.environ.get('MONGO_URI', 'mongodb://shipping-mongodb:27017/shipping_db')
 mongo = PyMongo(app)
 
 # Parcel search by parcel ID

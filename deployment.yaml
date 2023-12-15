@@ -1,20 +1,20 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ecamazon-shipping
+  name: shipping-service
 spec:
   selector:
     app: flask-app
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 30010
+      port: 30010
+      targetPort: 5000
   type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shipping-flask-api
+  name: shipping-flask-app
 spec:
   replicas: 2
   selector:
@@ -32,7 +32,7 @@ spec:
             - containerPort: 5000
           env:
             - name: MONGO_URI
-              value: "mongodb://mongo-service:27017/shipping_db"
+              value: "mongodb://shipping-mongodb:27017/shipping_db"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -59,12 +59,12 @@ spec:
       volumes:
         - name: mongo-persistent-storage
           persistentVolumeClaim:
-            claimName: mongo-pvc
+            claimName: shipping-mongo-pvc
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mongo-pvc
+  name: shipping-mongo-pvc
 spec:
   accessModes:
     - ReadWriteOnce
@@ -75,7 +75,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo-service
+  name: shipping-mongodb
 spec:
   selector:
     app: mongo
