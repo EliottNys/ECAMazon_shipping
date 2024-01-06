@@ -20,7 +20,7 @@ spec:
     app: shipping-web
   ports:
     - protocol: TCP
-      port: 30010
+      port: 30010 # external port assigned to us
       targetPort: 5000
   type: LoadBalancer
 ---
